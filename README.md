@@ -18,16 +18,16 @@ PHP 5.6 +
 Para conseguir os parametros a seguir:
 https://homolog.meiosdepagamentobradesco.com.br/manual/Manual_BoletoBancario.pdf. 
 
-Caso não tenha acesso, entre em contato com o seu gerente.
+Caso não tenha acesso, entre em contato com o seu gerente bancário.
 
 ```php
-    $params = array(
+    private $params = array(
         'email' => 'email@exemple.com.br',
         'merchant_id' => '999999999',
         'chave_seguranca' => 'kPme=$jY#UaC;P*BT#YXwK2RnO-mYulOKsoDEoDo956'
     );
 
-    $pagamento = new MeioPagamento($params);
+    $this->load->library('bradesco/MeioPagamento', $this->params);
 ```
 ## Step 2 - Criando um pedido
 
@@ -58,7 +58,7 @@ Caso não tenha acesso, entre em contato com o seu gerente.
         "service_tipo_renderizacao" => 2 // 0=HTML; 1=Tela com link PDF; 2=PDF; 
     );
     
-    $comprador = $pagamento->createPedido($data_service_pedido);
+    $comprador = $this->meiopagamento->createPedido($data_service_pedido);
 ```
 
 ## Gerando Token de autenticação
@@ -67,7 +67,7 @@ Caso não tenha acesso, entre em contato com o seu gerente.
 
 ```php
     private function gerarToken() {
-      $result = json_decode($pagamento->getAuthLogista($this->params['merchant_id']));      
+      $result = json_decode($this->meiopagamento->getAuthLogista($this->params['merchant_id']));      
       return $result->token->token;
     }
 ```
@@ -76,14 +76,14 @@ Caso não tenha acesso, entre em contato com o seu gerente.
 Para retornar apenas um pedido, é necessário que você envie o numero do pedido.
 
 ```php
-    $numPedido = $_GET['numPedido'];
-    $result = pagamento->getPedido($this->gerarToken(), $numPedido);
+    $numPedido = $this->input->get('numPedido');
+    $result = $this->meiopagamento->getPedido($this->gerarToken(), $numPedido);
 ```
 
 Para retornar uma lista de pedidos é necessário informar um array de argumentos.
 ```php
     $data = array(
-        'token' => $pagamento->gerarToken(),
+        'token' => $this->gerarToken(),
         'data_inicial' => date('Y/m/d'),
         'data_final' => date('Y/m/d', strtotime("+1 days")),
         'status' => 0, // 0 (Todos os pedidos) ou 1 (Pedidos pagos).
@@ -93,7 +93,6 @@ Para retornar uma lista de pedidos é necessário informar um array de argumento
     
     $boletos = $this->pagamento->getListPedidos($data);
 ```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+## Observações
+- Todos os retornos da library são **JSON**.
+- Caso não tenha acesso ao ambiente de homologação, entre em contato com o seu **gerente bancário**.
