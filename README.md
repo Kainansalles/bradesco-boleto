@@ -5,7 +5,7 @@ Meio de pagamento - Bradesco (Boleto Bancário) API
 
 ## Getting Started
 
-Esse módulo foi desenvolvido para atender as necessidades de um projeto em Codelgniter, em um futuro proximo realizarei atualizações para atender diversas plataformas.
+Esse módulo foi desenvolvido para atender as necessidades de um projeto em Codelgniter, ou seja, uma library. em um futuro proximo realizarei atualizações para atender diversas plataformas.
 
 ### Prerequisites
 
